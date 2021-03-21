@@ -1,0 +1,21 @@
+name: MacOS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: run make
+      run: make
+    - name: run tests
+      run: make test
+    - name: clean up
+      run: make fclean
