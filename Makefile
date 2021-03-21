@@ -3,6 +3,7 @@ NAME	=	double_linked_list.a
 SRC_D  = src
 INC_D = inc
 OBJ_D = obj
+TEST_D = tests
 
 SRC =	$(SRC_D)/double_linked_list.c
 		
@@ -27,9 +28,14 @@ $(OBJ): $(OBJ_D)/%.o: $(SRC_D)/%.c
 
 clean:
 		rm -rf $(OBJ_D)
+		rm -f test
 		rm	-rf *.dSYM
 
 fclean: clean
 	rm -f $(NAME)
+
+test: $(NAME)
+	@$(CC) $(CC_FLAGS) -I$(INC_D) -o test $(TEST_D)/main.c $(NAME)
+	@./test
 
 re: fclean all
