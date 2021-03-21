@@ -3,20 +3,28 @@
 
 #include <stddef.h>
 
-typedef struct	s_list
+typedef struct	s_doubly_linked_node
 {
 	void	*content;
-	struct	s_list	*next;
-	struct	s_list	*prev;
-}		t_list;
+	struct	s_doubly_linked_node	*next;
+	struct	s_doubly_linked_node	*prev;
+}		t_doubly_linked_node;
 
-t_list	*list_create(void *content);
-void	list_add_front(t_list **_list, t_list *_to_add);
-size_t	list_size(t_list *_list);
-t_list	*list_get_last(t_list *_beggining);
-void	list_add_back(t_list **_list, t_list *_to_add);
-void	list_delete_item(t_list *_to_free, void (*_ft_delete)(void*));
-void	list_clear(t_list **_list, void (*_ft_delete)(void*));
-void 	list_iter(t_list *_element, void (*_ft_iterator)(void *));
+typedef struct	s_doubly_linked_list
+{
+	t_doubly_linked_node	*first;
+	t_doubly_linked_node	*last;
+}		t_doubly_linked_list;
+
+t_doubly_linked_list	*list_create();
+t_doubly_linked_node	*node_create(void *content);
+void			list_add_front(t_doubly_linked_list *list, t_doubly_linked_node *to_add);
+size_t			list_size(t_doubly_linked_list *_list);
+t_doubly_linked_node	*list_get_last(t_doubly_linked_list *list);
+void			list_add_back(t_doubly_linked_list *list, t_doubly_linked_node *to_add);
+void 			list_iter(t_doubly_linked_list *list, void (*function)(void *));
+void			list_delete_item(t_doubly_linked_node *to_delete, void (*ft_delete)(void*));
+void			list_clear(t_doubly_linked_list *list, void (*_ft_delete)(void*));
+void 			list_destroy(t_doubly_linked_list *list, void (*ft_delete)(void *));
 
 #endif

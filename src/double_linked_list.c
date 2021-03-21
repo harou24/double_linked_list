@@ -1,59 +1,81 @@
 #include "double_linked_list.h"
 #include <stdlib.h>
 
-t_list	*list_create(void *content)
+t_doubly_linked_list	*list_create()
 {
-	t_list	*new;
+	t_doubly_linked_list	*list;
 
-	new = (t_list *)malloc(sizeof(t_list));
-	if (!new)
+	list = (t_doubly_linked_list *)malloc(sizeof(t_doubly_linked_list));
+	if (!list)
 		return (NULL);
-	new->content = content;
-	new->next = NULL;
-	new->prev = NULL;
-	return (new);
+	list->first = NULL;
+	list->last = NULL;
+	return (list);
 }
 
-void	list_add_front(t_list **list_head, t_list *to_add)
+t_doubly_linked_node	*node_create(void *content)
 {
-	to_add->next = *list_head;
+	t_doubly_linked_node	*node;
+
+	node = (t_doubly_linked_node *)malloc(sizeof(t_doubly_linked_node));
+	if (!node)
+		return (NULL);
+	node->content = content;
+	node->next = NULL;
+	node->prev = NULL;
+	return (node);
+}
+
+void	list_add_front(t_doubly_linked_list *list, t_doubly_linked_node *to_add)
+{
+	to_add->next = list->first;
 	to_add->prev = NULL;
-	*list_head = to_add;
+	list->first = to_add;
 }
 
-size_t	list_size(t_list *list)
+size_t	list_size(t_doubly_linked_list *list)
 {
-	int	size;
+	int			size;
+	t_doubly_linked_node	*node;
 
 	size = 0;
-	while (list)
+	node = list->first;
+	while (node)
 	{
 		size++;
-		list = list->next;
+		node = node->next;
 	}
 	return (size);
 }
 
-t_list	*list_get_last(t_list *list)
+t_doubly_linked_node	*list_get_last(t_doubly_linked_list *list)
 {
-	while (list)
-	{
-		list = list->next;
-	}
-	return (list);
+	return (list->last);
 }
 
-void	list_add_back(t_list **list, t_list *to_add)
+void	list_add_back(t_doubly_linked_list *list, t_doubly_linked_node *to_add)
 {
-	t_list	*last;
+	t_doubly_linked_node	*last;
 
-	last = list_get_last(*list);
+	last = list_get_last(list);
 	to_add->prev = last;
 	last->next = to_add;
 	to_add->next = NULL;
 }
 
-void	list_delete_item(t_list *to_delete, void (*ft_delete)(void*))
+void	list_iter(t_doubly_linked_list *list, void (*function)(void*))
+{
+	t_doubly_linked_node	*node;
+
+	node = list->first;
+	while (node)
+	{
+		function(node->content);
+		node = node->next;
+	}
+}
+
+void	list_delete_item(t_doubly_linked_node *to_delete, void (*ft_delete)(void*))
 {
 	if (to_delete->next != NULL)
 		to_delete->prev->next = to_delete->next;
@@ -66,20 +88,13 @@ void	list_delete_item(t_list *to_delete, void (*ft_delete)(void*))
 	ft_delete(to_delete->content);
 }
 
-void	list_clear(t_list **list, void (*ft_delete)(void*))
+void	list_clear(t_doubly_linked_list *list, void (*ft_delete)(void*))
 {
-	while (*list)
-	{
-		list_delete_item(*list, ft_delete);
-		*list = (*list)->next;
-	}
+	list_iter(list, ft_delete);
 }
 
-void	list_iter(t_list *list, void (*function)(void*))
+void	list_destroy(t_doubly_linked_list *list, void (*ft_delete)(void*))
 {
-	while (list)
-	{
-		function(list->content);
-		list = list->next;
-	}
+	list_clear(list, ft_delete);
+	free(list);
 }
