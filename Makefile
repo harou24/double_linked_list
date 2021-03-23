@@ -1,18 +1,19 @@
-NAME	=	double_linked_list.a
+NAME	=	doubly_linked_list.a
 
 SRC_D  = src
 INC_D = inc
 OBJ_D = obj
 TEST_D = tests
 
-SRC =	$(SRC_D)/double_linked_list.c
+SRC =	$(SRC_D)/doubly_linked_list.c
 		
-INC =	$(INC_D)/double_linked_list.h
+INC =	$(INC_D)/doubly_linked_list.h
 
 OBJ := $(SRC:$(SRC_D)/%.c=$(OBJ_D)/%.o)
 
 CC = clang
-CC_FLAGS	=	-Wall -Wextra -Werror
+CC_FLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
+
 AR_COMMAND	=	ar rsv
 
 all: $(NAME)

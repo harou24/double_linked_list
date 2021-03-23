@@ -1,4 +1,4 @@
-#include "double_linked_list.h"
+#include "doubly_linked_list.h"
 #include <stdlib.h>
 
 t_doubly_linked_list	*list_create()
@@ -28,6 +28,8 @@ t_doubly_linked_node	*node_create(void *content)
 
 void	list_add_front(t_doubly_linked_list *list, t_doubly_linked_node *to_add)
 {
+	if (list->first)
+		list->first->prev = to_add;
 	to_add->next = list->first;
 	to_add->prev = NULL;
 	list->first = to_add;
@@ -75,22 +77,32 @@ void	list_iter(t_doubly_linked_list *list, void (*function)(void*))
 	}
 }
 
-void	list_delete_item(t_doubly_linked_node *to_delete, void (*ft_delete)(void*))
+void	list_delete_item(t_doubly_linked_list *list, t_doubly_linked_node *to_delete, void (*ft_delete)(void*))
 {
-	if (to_delete->next != NULL)
-		to_delete->prev->next = to_delete->next;
-	else
-		to_delete->prev->next = NULL;
-	if (to_delete->prev != NULL)
+	if (to_delete->next)
 		to_delete->next->prev = to_delete->prev;
 	else
-		to_delete->next->prev = NULL;
+		list->last = to_delete->prev;
+	if (to_delete->prev)
+		to_delete->prev->next = to_delete->next;
+	else
+		list->first = to_delete->next;
 	ft_delete(to_delete->content);
+	free(to_delete);
 }
 
 void	list_clear(t_doubly_linked_list *list, void (*ft_delete)(void*))
 {
-	list_iter(list, ft_delete);
+	t_doubly_linked_node	*node;
+	t_doubly_linked_node	*tmp;
+
+	node = list->first;
+	while (node)
+	{
+		tmp = node;
+		node = node->next;
+		list_delete_item(list, tmp, ft_delete);
+	}
 }
 
 void	list_destroy(t_doubly_linked_list *list, void (*ft_delete)(void*))
