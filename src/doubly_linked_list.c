@@ -26,6 +26,11 @@ t_doubly_linked_node	*node_create(void *content)
 	return (node);
 }
 
+t_doubly_linked_node	*list_get_last(t_doubly_linked_list *list)
+{
+	return (list->last);
+}
+
 void	list_add_front(t_doubly_linked_list *list, t_doubly_linked_node *to_add)
 {
 	if (list->first)
@@ -33,6 +38,16 @@ void	list_add_front(t_doubly_linked_list *list, t_doubly_linked_node *to_add)
 	to_add->next = list->first;
 	to_add->prev = NULL;
 	list->first = to_add;
+}
+
+void	list_add_back(t_doubly_linked_list *list, t_doubly_linked_node *to_add)
+{
+	t_doubly_linked_node	*last;
+
+	last = list_get_last(list);
+	to_add->prev = last;
+	last->next = to_add;
+	to_add->next = NULL;
 }
 
 size_t	list_size(t_doubly_linked_list *list)
@@ -48,21 +63,6 @@ size_t	list_size(t_doubly_linked_list *list)
 		node = node->next;
 	}
 	return (size);
-}
-
-t_doubly_linked_node	*list_get_last(t_doubly_linked_list *list)
-{
-	return (list->last);
-}
-
-void	list_add_back(t_doubly_linked_list *list, t_doubly_linked_node *to_add)
-{
-	t_doubly_linked_node	*last;
-
-	last = list_get_last(list);
-	to_add->prev = last;
-	last->next = to_add;
-	to_add->next = NULL;
 }
 
 void	list_iter(t_doubly_linked_list *list, void (*function)(void*))
