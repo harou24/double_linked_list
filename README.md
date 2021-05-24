@@ -5,7 +5,7 @@ Doubly linked list implementation in C
 [![macos](https://github.com/harou24/double_linked_list/workflows/MacOS/badge.svg)](https://github.com/harou24/double_linked_list/actions?workflow=MacOS)
 
 Functionalities :
-
+````c
 t_list	*list_create(void *content);
 
 void	list_add_front(t_list **_list, t_list *_to_add);
